@@ -1,5 +1,5 @@
 import tensorflow as tf
-import ffm
+from fourier_dnn import ffm
 
 model = tf.keras.models.Sequential([
     ffm.BasicFFM(),
