@@ -1,5 +1,7 @@
 # fourier-dnn
 
+![Tests](https://github.com/Samyak2/fourier-dnn/workflows/Tests/badge.svg)
+
 Tensorflow 2.0 implementation of fourier feature mapping networks.
 
 # Setup
