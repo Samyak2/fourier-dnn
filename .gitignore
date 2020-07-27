@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# datasets
+*data_2d_text.npz
+*data_div2k.npz
