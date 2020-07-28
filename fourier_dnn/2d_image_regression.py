@@ -1,13 +1,12 @@
 import tensorflow as tf
-import matplotlib.pyplot as plt
-
-from fourier_dnn import ffm
-from fourier_dnn.ffm_mlp import FourierMLP
+from ffm_mlp import FourierMLP
 from image_regression_data import train_dataset, test_dataset
+import matplotlib.pyplot as plt
+import os
 
-EPOCHS = 100
+EPOCHS = 1000
 
-model = FourierMLP(4, 256, 256, 3, gaussian=False)
+model = FourierMLP(10, 128, 256, 3)
 
 loss_fn = tf.keras.losses.MeanSquaredError()
 
@@ -18,7 +17,7 @@ model.compile(optimizer=tf.keras.optimizers.Adam(
 
 d = next(iter(train_dataset))
 
-model.fit(d[0], d[1], epochs=100)
+model.fit(d[0], d[1], epochs=EPOCHS)
 
 o = model(d[0])
 
