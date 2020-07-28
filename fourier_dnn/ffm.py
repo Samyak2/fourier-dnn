@@ -1,9 +1,13 @@
 import tensorflow as tf
 import numpy as np
 
+# pylint: disable=no-value-for-parameter, unexpected-keyword-arg, arguments-differ
+# pylint: disable=attribute-defined-outside-init
+
 class BasicFFM(tf.keras.layers.Layer):
+    """A fourier feature mapping layer that simply wraps the input around a unit circle"""
+
     def __init__(self):
-        
         super().__init__()
 
     def build(self, shape_input):
@@ -12,7 +16,9 @@ class BasicFFM(tf.keras.layers.Layer):
         num_units = shape_input[-1]
 
         # Defining the basic FFM layer (Fully connected) with non-trainable weights
-        self.FFM_kernel = tf.keras.layers.Dense(num_units, trainable = False, kernel_initializer = 'identity')
+        self.FFM_kernel = tf.keras.layers.Dense(num_units,
+                                                trainable=False,
+                                                kernel_initializer='identity')
 
     def call(self, points_input):
 
@@ -27,12 +33,13 @@ class BasicFFM(tf.keras.layers.Layer):
         cos_output = tf.cos(kernel_output)
 
         # Concatenating the outputs for final result
-        final_output = tf.concat([sin_output, cos_output], axis = -1)
+        final_output = tf.concat([sin_output, cos_output], axis=-1)
         return final_output
 
 class GaussianFFM(tf.keras.layers.Layer):
+    """A fourier feature mapping layer that randomly samples weights from a gaussian distribution"""
 
-    def __init__(self, std_dev : float, num_units : int):
+    def __init__(self, std_dev: float, num_units: int):
 
         super().__init__()
         self.std_dev = float(std_dev)
@@ -41,10 +48,13 @@ class GaussianFFM(tf.keras.layers.Layer):
     def build(self, shape_input):
 
         # Defining the weights initializer
-        layer_initializer = tf.keras.initializers.RandomNormal(mean = 0, stddev = self.std_dev, seed = 0)
+        layer_initializer = tf.keras.initializers.RandomNormal(mean=0, stddev=self.std_dev, seed=0)
 
         # Defining the Gaussian FFM layer
-        self.FFM_kernel = tf.keras.layers.Dense(self.num_units, trainable = False, kernel_initializer = layer_initializer)
+        self.FFM_kernel = tf.keras.layers.Dense(self.num_units,
+                                                trainable=False,
+                                                kernel_initializer=layer_initializer)
+        self.FFM_kernel.build(shape_input)
 
     def call(self, points_input):
 
@@ -59,8 +69,6 @@ class GaussianFFM(tf.keras.layers.Layer):
         cos_output = tf.cos(kernel_output)
 
         # Concatenating the outputs for final result
-        final_output = tf.concat([sin_output, cos_output], axis = -1)
+        final_output = tf.concat([sin_output, cos_output], axis=-1)
+
         return final_output
-
-
-
