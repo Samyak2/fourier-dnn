@@ -7,7 +7,7 @@ from ffm import *
 
 class FourierMLP(tf.keras.Model):
 
-    def __init__(self, gaussian : bool = None, staddev : float = None, num_layers : int, num_units_FFM : int, num_units : int, num_units_final : int, ):
+    def __init__(self, num_layers : int, num_units_FFM : int, num_units : int, num_units_final : int, gaussian : bool = None, staddev : float = None):
 
         """
         Creates the Fourier MLP based on the arguments specified
@@ -21,7 +21,7 @@ class FourierMLP(tf.keras.Model):
             num_units_final : Number of units for the final output layer
         """
 
-        super().__init()
+        super().__init__()
 
         MLP_layers = list()
 
