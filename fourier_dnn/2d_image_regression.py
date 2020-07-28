@@ -1,18 +1,13 @@
 import tensorflow as tf
-from fourier_dnn import ffm
-from image_regression_data import train_dataset, test_dataset
 import matplotlib.pyplot as plt
+
+from fourier_dnn import ffm
+from fourier_dnn.ffm_mlp import FourierMLP
+from image_regression_data import train_dataset, test_dataset
 
 EPOCHS = 100
 
-model = tf.keras.models.Sequential([
-    ffm.BasicFFM(),
-    tf.keras.layers.Dense(256, activation='relu'),
-    tf.keras.layers.Dense(256, activation='relu'),
-    tf.keras.layers.Dense(256, activation='relu'),
-    tf.keras.layers.Dense(256, activation='relu'),
-    tf.keras.layers.Dense(3, activation='sigmoid')
-])
+model = FourierMLP(4, 256, 256, 3, gaussian=False)
 
 loss_fn = tf.keras.losses.MeanSquaredError()
 
