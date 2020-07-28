@@ -3,8 +3,12 @@ import pytest
 import tensorflow as tf
 from ffm import *
 
+# pylint: disable=no-value-for-parameter, unexpected-keyword-arg, arguments-differ
+# pylint: disable=attribute-defined-outside-init
 
 def test_basic_FFM():
+
+    """ A simple test that checks the output of the Basic FFM layer """ 
 
     # Initializing random input
     tf.random.set_seed(1)
@@ -18,6 +22,7 @@ def test_basic_FFM():
 
 def test_gaussian_FFM():
 
+    """ A simple test that checks the output of the Gaussian FFM Layer """
     # Initializing random input
     tf.random.set_seed(1)
     test_input = tf.random.uniform(shape = [500, 2])
