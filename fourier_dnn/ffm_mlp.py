@@ -1,5 +1,5 @@
 import tensorflow as tf
-from ffm import BasicFFM, GaussianFFM
+from fourier_dnn.ffm import BasicFFM, GaussianFFM
 
 # pylint: disable=no-value-for-parameter, unexpected-keyword-arg, arguments-differ
 # pylint: disable=attribute-defined-outside-init

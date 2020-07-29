@@ -1,7 +1,7 @@
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
-from ffm_mlp import FourierMLP
+from fourier_dnn.ffm_mlp import FourierMLP
 from image_regression_data import train_dataset
 
 EPOCHS = 1000
