@@ -1,3 +1,2 @@
-tensorflow==2.2.0
-pytest==5.4.3
-matplotlib
+tensorflow>=2.0.0
+matplotlib>=3.0.0
