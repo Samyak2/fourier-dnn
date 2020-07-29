@@ -7,20 +7,20 @@ from fourier_dnn.ffm import BasicFFM, GaussianFFM
 
 class FourierMLP(tf.keras.Model):
 
+    """
+    Creates the Fourier MLP based on the arguments specified
+
+    Arguments:
+        gaussian : To specify if the first layer is a BasicFFM or GaussianFFM layer
+        staddev  : Standard deviation for the GaussianFFM
+        num_layers : Number of layers for the MLP
+        num_units_FFM : Number of units for the GaussianFFM layer
+        num_units : Number of units for the MLP layers
+        num_units_final : Number of units for the final output layer
+    """
+
     def __init__(self, num_layers: int, num_units: int, num_units_final: int,
                  gaussian: bool = None, staddev: float = None, num_units_FFM: int = None):
-
-        """
-        Creates the Fourier MLP based on the arguments specified
-
-        Arguments:
-            gaussian : To specify if the first layer is a BasicFFM or GaussianFFM layer
-            staddev  : Standard deviation for the GaussianFFM
-            num_layers : Number of layers for the MLP
-            num_units_FFM : Number of units for the GaussianFFM layer
-            num_units : Number of units for the MLP layers
-            num_units_final : Number of units for the final output layer
-        """
 
         super().__init__()
 
