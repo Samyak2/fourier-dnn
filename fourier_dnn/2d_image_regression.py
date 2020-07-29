@@ -1,8 +1,8 @@
 import tensorflow as tf
-from ffm_mlp import FourierMLP
-from image_regression_data import train_dataset, test_dataset
 import matplotlib.pyplot as plt
-import os
+
+from ffm_mlp import FourierMLP
+from image_regression_data import train_dataset
 
 EPOCHS = 1000
 
@@ -23,4 +23,3 @@ o = model(d[0])
 
 plt.imshow(o)
 plt.show()
-
