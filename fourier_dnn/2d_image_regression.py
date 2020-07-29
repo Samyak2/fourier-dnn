@@ -1,3 +1,5 @@
+import sys
+
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
@@ -23,21 +25,36 @@ def get_model(num_layers=10, num_units=128, num_units_final=3,
 
     return model
 
-def train_model(model, image_index, epochs, show_output=True):
+
+def model_test(model, image_index, show_output=True, save_output=True):
+    d = train_dataset.skip(image_index).take(1)
+    d = next(iter(d))
+    o = model(d[0])
+
+    if show_output:
+        plt.imshow(o)
+        if save_output:
+            plt.savefig(f"output_{image_index}.png")
+        else:
+            plt.show()
+    return o
+
+def train_model(model, image_index, epochs):
     """Trains the model on 2D image dataset, but only on image with index
     image_index and for given number of epochs. The output is shown if show_output is True.
     """
     d = train_dataset.skip(image_index).take(1)
     d = next(iter(d))
 
-    model.fit(d[0], d[1], epochs=epochs)
-
-    o = model(d[0])
-
-    if show_output:
-        plt.imshow(o)
-        plt.show()
+    model.fit(d[0], d[1], epochs=epochs, verbose=2)
 
 if __name__ == "__main__":
     i_model = get_model()
-    train_model(i_model, 0, 1000)
+    index = 0
+    epochs = 1000
+    if len(sys.argv) > 1:
+        index = int(sys.argv[1])
+        if len(sys.argv) > 2:
+            epochs = int(sys.argv[2])
+    train_model(i_model, index, epochs)
+    model_test(i_model, index)
