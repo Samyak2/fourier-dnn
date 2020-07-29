@@ -21,10 +21,10 @@ x_train_t = tf.stack([x_train for _ in range(train_images.shape[0])], axis=0)
 y_train_t = tf.convert_to_tensor(train_images[:, ::2, ::2, :], dtype=tf.float32)
 
 x_test_t = tf.stack([x_test for _ in range(train_images.shape[0])], axis=0)
-y_test_t = tf.convert_to_tensor(train_images[:, 1::2, 1::2, :], dtype=tf.float32)
+y_test_t = tf.convert_to_tensor(train_images, dtype=tf.float32)
 
-train_dataset = tf.data.Dataset.from_tensor_slices((x_train_t, y_train_t))
-test_dataset = tf.data.Dataset.from_tensor_slices((x_test_t, y_test_t))
+train_dataset = (x_train_t, y_train_t)
+test_dataset = (x_test_t, y_test_t)
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
