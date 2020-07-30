@@ -4,34 +4,54 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+import wandb
+from wandb.keras import WandbCallback
 
-from fourier_dnn.ffm_mlp import FourierMLP
-from fourier_dnn.metrics import PSNR
+from ffm_mlp import FourierMLP
+from metrics import PSNR
 from image_regression_data import train_dataset, test_dataset
 
 OUTPUT_IMG_PREFIX = "output_g"
 
-def get_model(num_layers=10, num_units=128, num_units_final=3,
-              gaussian=False, staddev=5, num_units_FFM=128,
-              learning_rate=1e-3):
+# Setting the hyperparemeter defaults
+hyperparameter_defaults = dict(
+    num_layers=10, 
+    num_units=128, 
+    num_units_final=3,
+    gaussian=False, 
+    staddev=5,
+    num_units_FFM=128,
+    learning_rate=1e-3,
+    epochs = 100,
+    beta_1 = 0.9,
+    beta_2 = 0.999,
+    epsilon = 1e-8
+)
+
+# Initialize wandb
+wandb.init(config=hyperparameter_defaults, project="fourier-feature-dnn")
+config = wandb.config
+
+def get_model(gaussian = False):
     """Constructs a Fourier MLP model for 2D image regression
     with default arguments
     """
 
-    model = FourierMLP(num_layers, num_units, num_units_final,
-                       gaussian=gaussian, staddev=staddev, num_units_FFM=num_units_FFM)
+    config.update({'gaussian' : gaussian}, allow_val_change=True)
+    model = FourierMLP(config.num_layers, config.num_units, config.num_units_final,
+                       gaussian=config.gaussian, staddev=config.staddev, num_units_FFM=config.num_units_FFM)
 
     loss_fn = tf.keras.losses.MeanSquaredError()
 
     model.compile(optimizer=tf.keras.optimizers.Adam(
-        learning_rate=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-8),
+        learning_rate=config.learning_rate, beta_1=config.beta_1, beta_2=config.beta_2, epsilon=config.epsilon),
                   loss=loss_fn,
                   metrics=['accuracy', PSNR()])
 
     return model
 
 
-def test_model(model, image_index, show_output=True, save_output=True):
+def test_model(model, image_index, show_output=True, save_output=False):
     """Tests model on image given by image_index and returns the train and test PSNR values
     Output images are shown in matplotlib window if show_output is True and save_output is False
     Output images are saved to disk if show_output is True and save_output is True
@@ -63,6 +83,11 @@ def test_model(model, image_index, show_output=True, save_output=True):
         else:
             plt.show()
         print(f"test PSNR: {psnr_test}")
+
+    wandb.log({
+        'Train PSNR Value' : psnr_train,
+        'Test PSNR Value' : psnr_test
+    })
     return psnr_train, psnr_test
 
 def train_model(model, image_index, epochs, verbose=2):
@@ -74,8 +99,9 @@ def train_model(model, image_index, epochs, verbose=2):
 
     test_X = test_dataset[0][image_index]
     test_Y = test_dataset[1][image_index]
+    config.update({'epochs' : epochs}, allow_val_change=True)
 
-    model.fit(train_X, train_Y, epochs=epochs, verbose=verbose, validation_data=(test_X, test_Y))
+    model.fit(train_X, train_Y, epochs=config.epochs, verbose=verbose, validation_data=(test_X, test_Y), callbacks=[WandbCallback()])
 
 def find_best_stddev(start=1, end=20, epochs=100, images=16):
     """Trains multiple GaussianFFM based FourierMLPs to find the best stddev value
@@ -98,11 +124,19 @@ def find_best_stddev(start=1, end=20, epochs=100, images=16):
 
 if __name__ == "__main__":
     i_model = get_model(gaussian=True)
-    index = 0
-    train_epochs = 1000
-    if len(sys.argv) > 1:
-        index = int(sys.argv[1])
-        if len(sys.argv) > 2:
-            train_epochs = int(sys.argv[2])
-        train_model(i_model, index, train_epochs)
-        test_model(i_model, index)
+    index = 1
+    train_epochs = 100
+
+
+
+    # # Handling CL arguments
+    # if len(sys.argv) > 1:
+    #     index = int(sys.argv[1])
+
+    #     # Number of Epochs
+    #     if len(sys.argv) > 2:
+    #         train_epochs = int(sys.argv[2])
+
+    # Training and testing model
+    train_model(i_model, index, train_epochs)
+    test_model(i_model, index)
