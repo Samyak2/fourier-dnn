@@ -4,6 +4,9 @@
 
 Tensorflow 2.0 implementation of fourier feature mapping networks.
 
+Based on the paper ["Fourier Features Let Networks Learn High Frequency Functions in Low Dimensional
+Domains"](https://arxiv.org/abs/2006.10739).
+
 # Results
 
 Results after training fourier feature mapping models for around 100-200 epochs.
@@ -42,4 +45,17 @@ model = FourierMLP(10, 256, 3,
 ```
 
 Use `fourier_dnn.metrics.PSNR` as a metric for `model.compile` to get PSNR values on every epoch.
+
+# Weights and Biases reports
+
+ - [Effect of standard
+deviation](https://app.wandb.ai/malthael/fourier-feature-dnn/reports/Effect-of-Standard-Deviation-on-Fourier-Feature-Networks--VmlldzoxODg1NDc)
+ - [Effect of learning
+   rate](https://app.wandb.ai/samyak/fourier-dnn/reports/Effect-of-learning-rate--VmlldzoxODg1Mjg)
+ - [Effect of number of Dense
+   units](https://app.wandb.ai/samyak/fourier-dnn/reports/Effect-of-number-of-Dense-units--VmlldzoxODg1NjQ)
+ - [Effect of standard deviation
+   2](https://app.wandb.ai/samyak/fourier-dnn/reports/Effect-of-number-of-Dense-units--VmlldzoxODg1NjQ)
+ - [Effect of number of
+   layers](https://app.wandb.ai/entherealenvy/fourier-dnn-fourier_dnn/reports/Fourier-DNN--VmlldzoxODg1MzI)
 
