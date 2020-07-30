@@ -11,6 +11,10 @@ from ffm_mlp import FourierMLP
 from metrics import PSNR
 from image_regression_data import train_dataset, test_dataset
 
+# pylint: disable=no-value-for-parameter, unexpected-keyword-arg, arguments-differ
+# pylint: disable=attribute-defined-outside-init
+# pylint: disable=too-many-ancestors
+
 OUTPUT_IMG_PREFIX = "output_g"
 
 # Setting the hyperparemeter defaults
